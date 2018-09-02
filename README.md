@@ -15,7 +15,7 @@ func main() {
 			h.H("font", h.Object{"color": "red"}, h.TextNode("Hello, world!")),
 		),
 	)
-  fmt.Println(node.ToString())
+	fmt.Println(node.ToString())
 }
 ```
 

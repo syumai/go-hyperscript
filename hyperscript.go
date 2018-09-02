@@ -30,8 +30,14 @@ func (elements Elements) ToString() string {
 }
 
 type (
-	Component func() Element
+	Component func(props Object) Element
 )
+
+var BlankElement = TextNode("")
+
+func BlankComponent(_ Object) Element {
+	return TextNode("")
+}
 
 func mergeElements(a Elements, b Elements) Elements {
 	lenA := len(a)
@@ -57,10 +63,9 @@ func mergeObjects(a Object, b Object) Object {
 }
 
 func H(tag interface{}, attrs Object, children ...Element) Element {
-	if c, ok := tag.(Component); ok {
-		node := c()
+	if c, ok := tag.(func(Object) Element); ok {
+		node := c(attrs)
 		if n, ok := node.(*Node); ok {
-			n.Attributes = mergeObjects(n.Attributes, attrs)
 			n.Children = mergeElements(n.Children, children)
 		}
 		return node
