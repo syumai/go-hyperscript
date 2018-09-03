@@ -6,13 +6,16 @@ import (
 	h "github.com/syumai/go-hyperscript"
 )
 
-func List(props h.Object) h.Element {
-	names := props["names"].([]string)
+func mapToList(names ...string) h.Elements {
 	elements := make(h.Elements, len(names))
 	for i, name := range names {
 		elements[i] = h.H("li", nil, h.TextNode(name))
 	}
-	return h.H("ul", nil, elements...)
+	return elements
+}
+
+func List(props h.Object) h.Element {
+	return h.H("ul", nil, mapToList(props.Strings("names")...)...)
 }
 
 func main() {
