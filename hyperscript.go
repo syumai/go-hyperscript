@@ -7,14 +7,14 @@ const (
 
 type Object map[string]interface{}
 
-func (o Object)Get(key string) interface{} {
+func (o Object) Get(key string) interface{} {
 	if v, ok := o[key]; ok {
 		return v
 	}
 	return nil
 }
 
-func (o Object)String(key string) string {
+func (o Object) String(key string) string {
 	if v, ok := o[key]; ok {
 		if s, ok := v.(string); ok {
 			return s
@@ -23,7 +23,7 @@ func (o Object)String(key string) string {
 	return ""
 }
 
-func (o Object)Int(key string) int {
+func (o Object) Int(key string) int {
 	if v, ok := o[key]; ok {
 		if i, ok := v.(int); ok {
 			return i
@@ -32,7 +32,7 @@ func (o Object)Int(key string) int {
 	return 0
 }
 
-func (o Object)Strings(key string) []string {
+func (o Object) Strings(key string) []string {
 	if v, ok := o[key]; ok {
 		if strs, ok := v.([]string); ok {
 			return strs
@@ -41,7 +41,7 @@ func (o Object)Strings(key string) []string {
 	return []string{}
 }
 
-func (o Object)Ints(key string) []int {
+func (o Object) Ints(key string) []int {
 	if v, ok := o[key]; ok {
 		if ints, ok := v.([]int); ok {
 			return ints
@@ -74,8 +74,8 @@ type (
 )
 
 var (
-	BlankElement = Text("")
-	BlankComponent = func (Object) VNode { return BlankElement }
+	BlankElement   = Text("")
+	BlankComponent = func(Object) VNode { return BlankElement }
 )
 
 func H(tag interface{}, attrs Object, children ...VNode) VNode {
