@@ -55,19 +55,10 @@ type (
 		GetNodeName() string
 		GetNodeType() int
 		GetChildren() VNodes
-		ToString() string
 	}
 
 	VNodes []VNode
 )
-
-func (nodes VNodes) ToString() string {
-	var str string
-	for _, n := range nodes {
-		str += n.ToString()
-	}
-	return str
-}
 
 type (
 	Component func(props Object) VNode

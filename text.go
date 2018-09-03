@@ -15,7 +15,3 @@ func (tn Text) GetNodeType() int {
 func (tn Text) GetChildren() VNodes {
 	return []VNode{}
 }
-
-func (tn Text) ToString() string {
-	return string(tn)
-}

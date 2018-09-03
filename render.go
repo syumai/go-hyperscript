@@ -25,7 +25,7 @@ func createElement(node VNode) js.Value {
 }
 
 func createElementFromTextVNode(node Text) js.Value {
-	return document.Call("createTextNode", node.ToString())
+	return document.Call("createTextNode", string(node))
 }
 
 func createElementFromElementVNode(node *Element) js.Value {

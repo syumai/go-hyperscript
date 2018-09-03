@@ -1,11 +1,11 @@
 # go-hyperscript
 
-[WIP]
-
-* hyperscript implementation in golang.
-* Write HTML using function.
+* Simple hyperscript like scripts implemented in golang.
+* Write HTML using golang function.
 
 ## Usage
+
+### Render to HTML using wasm
 
 ```go
 func main() {
@@ -15,14 +15,26 @@ func main() {
 			h.H("font", h.Object{"color": "red"}, h.Text("Hello, world!")),
 		),
 	)
-	fmt.Println(node.ToString())
+	body := js.Global().Get("document").Get("body")
+	h.Render(node, body)
 }
 ```
 
-### Output
+#### Result
 
-```html
-<div><h1>Example App</h1><strong><font color="red">Hello, world!</font></strong></div>
+https://syumai.github.io/go-hyperscript/examples/basic/
+
+## Environment
+
+* go 1.11
+
+## Development
+
+```console
+go get golang.org/dl/go1.11
+go1.11 download
+
+make build
 ```
 
 ## Author
