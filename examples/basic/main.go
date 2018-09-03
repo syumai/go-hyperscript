@@ -1,4 +1,4 @@
-package basic
+package main
 
 import (
 	"syscall/js"
@@ -24,8 +24,11 @@ func main() {
 		h.H("strong", nil,
 			h.H("font", h.Object{"color": "red"}, h.Text("Hello, world!")),
 		),
+		h.H("h2", nil, h.Text("List")),
 		h.H(List, h.Object{"names": []string{"a", "b", "c"}}),
-		h.H(List, h.Object{"names": []string{"d", "e", "f"}}),
+		h.H("a", h.Object{"href": "https://github.com/syumai/go-hyperscript/"},
+			h.Text("Show the code on GitHub"),
+		),
 	)
 	body := js.Global().Get("document").Get("body")
 	h.Render(node, body)
