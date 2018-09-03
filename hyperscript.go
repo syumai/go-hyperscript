@@ -51,41 +51,41 @@ func (o Object)Ints(key string) []int {
 }
 
 type (
-	Element interface {
+	VNode interface {
 		GetNodeName() string
 		GetNodeType() int
-		GetChildren() Elements
+		GetChildren() VNodes
 		ToString() string
 	}
 
-	Elements []Element
+	VNodes []VNode
 )
 
-func (elements Elements) ToString() string {
+func (nodes VNodes) ToString() string {
 	var str string
-	for _, el := range elements {
-		str += el.ToString()
+	for _, n := range nodes {
+		str += n.ToString()
 	}
 	return str
 }
 
 type (
-	Component func(props Object) Element
+	Component func(props Object) VNode
 )
 
 var (
-	BlankElement = TextNode("")
-	BlankComponent = func (Object) Element { return BlankElement }
+	BlankElement = Text("")
+	BlankComponent = func (Object) VNode { return BlankElement }
 )
 
-func H(tag interface{}, attrs Object, children ...Element) Element {
+func H(tag interface{}, attrs Object, children ...VNode) VNode {
 	switch v := tag.(type) {
 	case Component:
 		return v(attrs)
-	case func(Object) Element:
+	case func(Object) VNode:
 		return v(attrs)
 	case string:
-		return &Node{
+		return &Element{
 			NodeName:   v,
 			NodeType:   NODE_TYPE_ELEMENT_NODE,
 			Children:   children,

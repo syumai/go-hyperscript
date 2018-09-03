@@ -3,27 +3,27 @@ package hyperscript
 import "fmt"
 
 type (
-	Node struct {
+	Element struct {
 		NodeName   string
 		NodeType   int
-		Children   Elements
+		Children   VNodes
 		Attributes Object
 	}
 )
 
-func (vn *Node) GetNodeName() string {
+func (vn *Element) GetNodeName() string {
 	return vn.NodeName
 }
 
-func (vn *Node) GetNodeType() int {
+func (vn *Element) GetNodeType() int {
 	return vn.NodeType
 }
 
-func (vn *Node) GetChildren() Elements {
+func (vn *Element) GetChildren() VNodes {
 	return vn.Children
 }
 
-func (vn *Node) ToString() string {
+func (vn *Element) ToString() string {
 	var attrs string
 	for k, v := range vn.Attributes {
 		attrs += fmt.Sprintf(` %s="%s"`, k, v)

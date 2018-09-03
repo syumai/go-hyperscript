@@ -6,23 +6,23 @@ import (
 	h "github.com/syumai/go-hyperscript"
 )
 
-func mapToList(names ...string) h.Elements {
-	elements := make(h.Elements, len(names))
+func mapToList(names ...string) h.VNodes {
+	elements := make(h.VNodes, len(names))
 	for i, name := range names {
-		elements[i] = h.H("li", nil, h.TextNode(name))
+		elements[i] = h.H("li", nil, h.Text(name))
 	}
 	return elements
 }
 
-func List(props h.Object) h.Element {
+func List(props h.Object) h.VNode {
 	return h.H("ul", nil, mapToList(props.Strings("names")...)...)
 }
 
 func main() {
 	node := h.H("div", nil,
-		h.H("h1", nil, h.TextNode("Example App")),
+		h.H("h1", nil, h.Text("Example App")),
 		h.H("strong", nil,
-			h.H("font", h.Object{"color": "red"}, h.TextNode("Hello, world!")),
+			h.H("font", h.Object{"color": "red"}, h.Text("Hello, world!")),
 		),
 		h.H(List, h.Object{"names": []string{"a", "b", "c"}}),
 		h.H(List, h.Object{"names": []string{"d", "e", "f"}}),
