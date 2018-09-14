@@ -27,6 +27,15 @@ func (o Object) Int(key string) int {
 	return 0
 }
 
+func (o Object) Bool(key string) bool {
+	if v, ok := o[key]; ok {
+		if b, ok := v.(bool); ok {
+			return b
+		}
+	}
+	return false
+}
+
 func (o Object) Strings(key string) []string {
 	if v, ok := o[key]; ok {
 		if strs, ok := v.([]string); ok {
@@ -43,4 +52,17 @@ func (o Object) Ints(key string) []int {
 		}
 	}
 	return []int{}
+}
+
+func (o Object) Bools(key string) []bool {
+	if v, ok := o[key]; ok {
+		if b, ok := v.([]bool); ok {
+			return b
+		}
+	}
+	return []bool{}
+}
+
+func (o Object) Key() string {
+	return o.String("key")
 }

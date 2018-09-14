@@ -16,7 +16,7 @@ type (
 )
 
 type (
-	Component func(props Object) VNode
+	StatelessComponent func(props Object) VNode
 )
 
 var (
@@ -26,7 +26,7 @@ var (
 
 func H(tag interface{}, attrs Object, children ...VNode) VNode {
 	switch v := tag.(type) {
-	case Component:
+	case StatelessComponent:
 		return v(attrs)
 	case func(Object) VNode:
 		return v(attrs)

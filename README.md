@@ -26,6 +26,10 @@ func main() {
 * https://syumai.github.io/go-hyperscript/examples/basic/
   - [Code](https://github.com/syumai/go-hyperscript/tree/master/examples/basic/main.go)
 
+## Other Examples
+
+* [Counter example](https://syumai.github.io/go-hyperscript/examples/counter/)
+  - [Code](https://github.com/syumai/go-hyperscript/tree/master/examples/counter/main.go)
 
 ## Environment
 

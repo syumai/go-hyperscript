@@ -14,27 +14,22 @@ func Render(node VNode, container js.Value) {
 }
 
 func createElement(node VNode) js.Value {
-	switch v := node.(type) {
+	var el js.Value
+	switch n := node.(type) {
 	case Text:
-		return createElementFromTextVNode(v)
+		el = document.Call("createTextNode", string(n))
 	case *Element:
-		return createElementFromElementVNode(v)
+		el = document.Call("createElement", n.GetNodeName())
+		for k, v := range n.Attributes {
+			el.Call("setAttribute", k, v)
+			el.Set(k, v)
+		}
+		for _, child := range n.Children {
+			el.Call("appendChild", createElement(child))
+		}
+		n.Base = el
 	default:
-		return js.Null()
-	}
-}
-
-func createElementFromTextVNode(node Text) js.Value {
-	return document.Call("createTextNode", string(node))
-}
-
-func createElementFromElementVNode(node *Element) js.Value {
-	el := document.Call("createElement", node.GetNodeName())
-	for k, v := range node.Attributes {
-		el.Set(k, v)
-	}
-	for _, child := range node.Children {
-		el.Call("appendChild", createElement(child))
+		el = document.Call("createTextNode", "")
 	}
 	return el
 }
