@@ -78,7 +78,7 @@ func (f fakeValue) Invoke(args ...interface{}) h.Value {
 }
 
 func (f fakeValue) New(args ...interface{}) h.Value {
-	panic("not implemented")
+	return New(h.Object{})
 }
 
 func (f fakeValue) Float() float64 {
@@ -114,5 +114,6 @@ func (f fakeValue) String() string {
 }
 
 func (f fakeValue) InstanceOf(t h.Value) bool {
-	panic("implement me")
+	// TODO: implement
+	return false
 }
