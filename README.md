@@ -38,9 +38,6 @@ func main() {
 ## Development
 
 ```console
-go get golang.org/dl/go1.11
-go1.11 download
-
 make build
 ```
 
