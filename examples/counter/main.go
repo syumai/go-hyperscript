@@ -4,8 +4,8 @@ import (
 	"strconv"
 	"syscall/js"
 
-	h "github.com/syumai/go-hyperscript/hyperscript"
 	"github.com/syumai/go-hyperscript/dom"
+	h "github.com/syumai/go-hyperscript/hyperscript"
 )
 
 var body = js.Global().Get("document").Get("body")
@@ -25,16 +25,16 @@ func decrement() {
 	state.count--
 }
 
-func action(f func()) js.Callback {
-	return js.NewCallback(func([]js.Value) { f(); update() })
+func action(f func()) h.Callback {
+	return func([]h.Value) { f(); update() }
 }
 
 func Counter(props h.Object) h.VNode {
-	return h.H("div", h.Props{"className": "counter"},
+	return h.H("div", h.Object{"className": "counter"},
 		h.H("div", nil, h.Text(strconv.Itoa(props.Int("count")))),
 		h.H("div", nil,
-			h.H("button", h.Props{"onclick": action(increment)}, h.Text("+")),
-			h.H("button", h.Props{"onclick": action(decrement)}, h.Text("-")),
+			h.H("button", h.Object{"onclick": action(increment)}, h.Text("+")),
+			h.H("button", h.Object{"onclick": action(decrement)}, h.Text("-")),
 		),
 	)
 }
@@ -42,8 +42,8 @@ func Counter(props h.Object) h.VNode {
 func render() h.VNode {
 	return h.H("div", nil,
 		h.H("h1", nil, h.Text("Counter")),
-		h.H(Counter, h.Props{"count": state.count}),
-		h.H("a", h.Props{"href": "https://github.com/syumai/go-hyperscript/"},
+		h.H(Counter, h.Object{"count": state.count}),
+		h.H("a", h.Object{"href": "https://github.com/syumai/go-hyperscript/"},
 			h.Text("Show the code on GitHub"),
 		),
 	)

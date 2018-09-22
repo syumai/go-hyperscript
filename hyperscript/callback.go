@@ -1,10 +1,10 @@
 package hyperscript
 
 type (
-	Callback func(args []Object)
+	Callback func(args []Value)
 	EventCallback struct {
 		Flg EventCallbackFlag
-		Func func(event Object)
+		Func func(event Value)
 	}
 )
 
@@ -16,7 +16,7 @@ const (
 	StopImmediatePropagation
 )
 
-func NewEventCallback(flags EventCallbackFlag, fn func(event Object)) EventCallback {
+func NewEventCallback(flags EventCallbackFlag, fn func(event Value)) EventCallback {
 	return EventCallback{
 		Flg: flags,
 		Func: fn,

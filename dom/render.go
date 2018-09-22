@@ -2,6 +2,7 @@ package dom
 
 import (
 	"syscall/js"
+
 	h "github.com/syumai/go-hyperscript/hyperscript"
 )
 
@@ -22,7 +23,22 @@ func createElement(node h.VNode) js.Value {
 	case *h.Element:
 		el = document.Call("createElement", n.GetNodeName())
 		for k, v := range n.Attributes {
-			el.Set(k, v)
+			switch c := v.(type) {
+			case h.Callback:
+				el.Set(k, js.NewCallback(func(v []js.Value) {
+					s := make([]h.Value, len(v))
+					for i := 0; i < len(v); i++ {
+						s[i] = jsValue(v[i])
+					}
+					c(s)
+				}))
+			case h.EventCallback:
+				el.Set(k, js.NewEventCallback(js.EventCallbackFlag(c.Flg), func(event js.Value) {
+					c.Func(jsValue(event))
+				}))
+			default:
+				el.Set(k, v)
+			}
 		}
 		for _, child := range n.Children {
 			el.Call("appendChild", createElement(child))
