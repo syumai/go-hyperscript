@@ -24,7 +24,7 @@ var (
 	BlankComponent = func(Object) VNode { return BlankElement }
 )
 
-func H(tag interface{}, attrs Object, children ...VNode) VNode {
+func H(tag interface{}, attrs Props, children ...VNode) VNode {
 	switch v := tag.(type) {
 	case StatelessComponent:
 		return v(attrs)

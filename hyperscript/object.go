@@ -1,15 +1,26 @@
 package hyperscript
 
-type Object map[string]interface{}
+type Object interface {
+	Get(string) interface{}
+	String(string) string
+	Strings(string) []string
+	Int(string) int
+	Ints(string) []int
+	Bool(string) bool
+	Bools(string) []bool
+	Key() string
+}
 
-func (o Object) Get(key string) interface{} {
+type Props map[string]interface{}
+
+func (o Props) Get(key string) interface{} {
 	if v, ok := o[key]; ok {
 		return v
 	}
 	return nil
 }
 
-func (o Object) String(key string) string {
+func (o Props) String(key string) string {
 	if v, ok := o[key]; ok {
 		if s, ok := v.(string); ok {
 			return s
@@ -18,7 +29,7 @@ func (o Object) String(key string) string {
 	return ""
 }
 
-func (o Object) Int(key string) int {
+func (o Props) Int(key string) int {
 	if v, ok := o[key]; ok {
 		if i, ok := v.(int); ok {
 			return i
@@ -27,7 +38,7 @@ func (o Object) Int(key string) int {
 	return 0
 }
 
-func (o Object) Bool(key string) bool {
+func (o Props) Bool(key string) bool {
 	if v, ok := o[key]; ok {
 		if b, ok := v.(bool); ok {
 			return b
@@ -36,7 +47,7 @@ func (o Object) Bool(key string) bool {
 	return false
 }
 
-func (o Object) Strings(key string) []string {
+func (o Props) Strings(key string) []string {
 	if v, ok := o[key]; ok {
 		if strs, ok := v.([]string); ok {
 			return strs
@@ -45,7 +56,7 @@ func (o Object) Strings(key string) []string {
 	return []string{}
 }
 
-func (o Object) Ints(key string) []int {
+func (o Props) Ints(key string) []int {
 	if v, ok := o[key]; ok {
 		if ints, ok := v.([]int); ok {
 			return ints
@@ -54,7 +65,7 @@ func (o Object) Ints(key string) []int {
 	return []int{}
 }
 
-func (o Object) Bools(key string) []bool {
+func (o Props) Bools(key string) []bool {
 	if v, ok := o[key]; ok {
 		if b, ok := v.([]bool); ok {
 			return b
@@ -63,6 +74,6 @@ func (o Object) Bools(key string) []bool {
 	return []bool{}
 }
 
-func (o Object) Key() string {
+func (o Props) Key() string {
 	return o.String("key")
 }

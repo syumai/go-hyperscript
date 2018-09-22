@@ -22,13 +22,11 @@ func createElement(node h.VNode) js.Value {
 	case *h.Element:
 		el = document.Call("createElement", n.GetNodeName())
 		for k, v := range n.Attributes {
-			el.Call("setAttribute", k, v)
 			el.Set(k, v)
 		}
 		for _, child := range n.Children {
 			el.Call("appendChild", createElement(child))
 		}
-		n.Base = el
 	default:
 		el = document.Call("createTextNode", "")
 	}

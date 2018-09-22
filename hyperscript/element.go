@@ -5,7 +5,7 @@ type (
 		NodeName   string
 		NodeType   int
 		Children   VNodes
-		Attributes Object
+		Attributes Props
 	}
 )
 
