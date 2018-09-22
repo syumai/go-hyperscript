@@ -4,7 +4,8 @@ import (
 	"strconv"
 	"syscall/js"
 
-	h "github.com/syumai/go-hyperscript"
+	h "github.com/syumai/go-hyperscript/hyperscript"
+	"github.com/syumai/go-hyperscript/dom"
 )
 
 var body = js.Global().Get("document").Get("body")
@@ -50,7 +51,7 @@ func render() h.VNode {
 
 func update() {
 	body.Set("innerHTML", "")
-	h.Render(render(), body)
+	dom.Render(render(), body)
 }
 
 func main() {

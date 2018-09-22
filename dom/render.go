@@ -1,7 +1,8 @@
-package hyperscript
+package dom
 
 import (
 	"syscall/js"
+	h "github.com/syumai/go-hyperscript/hyperscript"
 )
 
 var (
@@ -9,16 +10,16 @@ var (
 	document = js.Global().Get("document")
 )
 
-func Render(node VNode, container js.Value) {
+func Render(node h.VNode, container js.Value) {
 	container.Call("appendChild", createElement(node))
 }
 
-func createElement(node VNode) js.Value {
+func createElement(node h.VNode) js.Value {
 	var el js.Value
 	switch n := node.(type) {
-	case Text:
+	case h.Text:
 		el = document.Call("createTextNode", string(n))
-	case *Element:
+	case *h.Element:
 		el = document.Call("createElement", n.GetNodeName())
 		for k, v := range n.Attributes {
 			el.Call("setAttribute", k, v)

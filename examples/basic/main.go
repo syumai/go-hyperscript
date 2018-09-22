@@ -3,7 +3,8 @@ package main
 import (
 	"syscall/js"
 
-	h "github.com/syumai/go-hyperscript"
+	h "github.com/syumai/go-hyperscript/hyperscript"
+	"github.com/syumai/go-hyperscript/dom"
 )
 
 var body = js.Global().Get("document").Get("body")
@@ -33,5 +34,5 @@ func main() {
 			h.Text("Show the code on GitHub"),
 		),
 	)
-	h.Render(node, body)
+	dom.Render(node, body)
 }
