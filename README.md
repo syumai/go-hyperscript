@@ -39,6 +39,7 @@ func main() {
 
 ```console
 make build
+make test
 ```
 
 ## Author
