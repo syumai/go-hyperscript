@@ -1,14 +1,11 @@
 package hyperscript
 
-import "syscall/js"
-
 type (
 	Element struct {
 		NodeName   string
 		NodeType   int
 		Children   VNodes
 		Attributes Object
-		Base       js.Value
 	}
 )
 

@@ -9,6 +9,10 @@ func (o Object) Get(key string) interface{} {
 	return nil
 }
 
+func (o Object) Set(key string, value interface{}) {
+	o[key] = value
+}
+
 func (o Object) String(key string) string {
 	if v, ok := o[key]; ok {
 		if s, ok := v.(string); ok {
