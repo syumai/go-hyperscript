@@ -12,7 +12,7 @@ import (
 var app = func(h.Object) h.VNode {
 	return h.H("div", nil,
 		h.H("h1", nil, h.Text("Counter")),
-		h.H(counter.Counter, nil),
+		h.H(counter.Counter{}, nil),
 		h.H("a", h.Object{"href": "https://github.com/syumai/go-hyperscript/"},
 			h.Text("Show the code on GitHub"),
 		),

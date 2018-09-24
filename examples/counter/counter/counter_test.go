@@ -1,19 +1,27 @@
 package counter
 
-import "testing"
+import (
+	"testing"
+)
+
+func newCounter() *Counter {
+	c := &Counter{}
+	c.Initialize(c.InitialState(), nil, nil)
+	return c
+}
 
 func Test_increment(t *testing.T) {
-	state = State{}
-	increment()
-	if state.count != 1 {
+	c := newCounter()
+	c.increment()
+	if c.State.Int("count") != 1 {
 		t.Errorf("count must be 1")
 	}
 }
 
 func Test_decrement(t *testing.T) {
-	state = State{}
-	decrement()
-	if state.count != -1 {
+	c := newCounter()
+	c.decrement()
+	if c.State.Int("count") != -1 {
 		t.Errorf("count must be -1")
 	}
 }

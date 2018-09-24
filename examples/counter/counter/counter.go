@@ -3,30 +3,37 @@ package counter
 import (
 	"strconv"
 
-	"github.com/syumai/go-hyperscript/examples/counter/render"
 	h "github.com/syumai/go-hyperscript/hyperscript"
 )
 
-type State struct {
-	count int
+type Counter struct {
+	h.ComponentBase
 }
 
-var state = State{}
-
-func increment() {
-	state.count++
+func (c *Counter) InitialState() h.Object {
+	return h.Object{
+		"count": 0,
+	}
 }
 
-func decrement() {
-	state.count--
-}
-
-func Counter(h.Object) h.VNode {
+func (c *Counter) Render() h.VNode {
 	return h.H("div", h.Object{"className": "counter"},
-		h.H("div", nil, h.Text(strconv.Itoa(state.count))),
+		h.H("div", nil, h.Text(strconv.Itoa(c.State.Int("count")))),
 		h.H("div", nil,
-			h.H("button", h.Object{"onclick": render.Action(increment)}, h.Text("+")),
-			h.H("button", h.Object{"onclick": render.Action(decrement)}, h.Text("-")),
+			h.H("button", h.Object{"onclick": h.Callback(func([]h.Value) { c.increment() })}, h.Text("+")),
+			h.H("button", h.Object{"onclick": h.Callback(func([]h.Value) { c.decrement() })}, h.Text("-")),
 		),
 	)
+}
+
+func (c *Counter) increment() {
+	c.SetState(h.Object{
+		"count": c.State.Int("count") + 1,
+	})
+}
+
+func (c *Counter) decrement() {
+	c.SetState(h.Object{
+		"count": c.State.Int("count") - 1,
+	})
 }

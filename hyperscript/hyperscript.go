@@ -25,10 +25,14 @@ var (
 )
 
 func H(tag interface{}, attrs Object, children ...VNode) VNode {
+	if v, ok := tag.(func(Object) VNode); ok {
+		v = StatelessComponent(v)
+	}
 	switch v := tag.(type) {
+	case Component:
+		v.Initialize(v.InitialState(), attrs, func() {})
+		return v.Render()
 	case StatelessComponent:
-		return v(attrs)
-	case func(Object) VNode:
 		return v(attrs)
 	case string:
 		return &Element{
