@@ -33,7 +33,6 @@ func H(tag interface{}, attrs Object, children ...VNode) VNode {
 	case string:
 		return &Element{
 			NodeName:   v,
-			NodeType:   NODE_TYPE_ELEMENT_NODE,
 			Children:   children,
 			Attributes: attrs,
 		}

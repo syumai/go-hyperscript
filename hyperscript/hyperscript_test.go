@@ -60,7 +60,6 @@ func TestH(t *testing.T) {
 			},
 			&Element{
 				"div",
-				NODE_TYPE_ELEMENT_NODE,
 				[]VNode{
 					Text("should be included"),
 				},
