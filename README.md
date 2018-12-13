@@ -17,7 +17,7 @@ func main() {
 		...
 	)
 	body := js.Global().Get("document").Get("body")
-	dom.Render(node, body)
+	dom.NewRenderer().Render(node, body)
 }
 ```
 
