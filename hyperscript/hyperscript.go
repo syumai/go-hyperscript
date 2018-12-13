@@ -1,24 +1,27 @@
 package hyperscript
 
-const (
-	NODE_TYPE_ELEMENT_NODE = 1
-	NODE_TYPE_TEXT_NODE    = 3
-)
-
 type (
 	VNode interface {
 		GetNodeName() string
-		GetNodeType() int
+		GetNodeType() NodeType
 		GetChildren() VNodes
 		SetReference(Value)
 		GetReference() Value
 	}
 
 	VNodes []VNode
+
+	NodeType int
 )
 
 type (
 	StatelessComponent func(props Object) VNode
+)
+
+const (
+	NODE_TYPE_UNKNOWN      NodeType = 0
+	NODE_TYPE_ELEMENT_NODE          = 1
+	NODE_TYPE_TEXT_NODE             = 3
 )
 
 var (
@@ -35,6 +38,7 @@ func H(tag interface{}, attrs Object, children ...VNode) VNode {
 	case string:
 		return &Element{
 			NodeName:   v,
+			NodeType:   NODE_TYPE_ELEMENT_NODE,
 			Children:   children,
 			Attributes: attrs,
 		}

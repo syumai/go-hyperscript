@@ -1,6 +1,7 @@
 package dom
 
 import (
+	"strconv"
 	"syscall/js"
 
 	h "github.com/syumai/go-hyperscript/hyperscript"
@@ -29,15 +30,17 @@ func (r *Renderer) Render(node h.VNode, container js.Value) {
 }
 
 func createElement(node h.VNode) js.Value {
+	println("create element")
 	var el js.Value
 	switch n := node.(type) {
-	case h.Text:
-		el = document.Call("createTextNode", string(n))
+	case *h.TextElement:
+		el = document.Call("createTextNode", n.TextContent)
+		node.SetReference(jsValue(el))
 	case *h.Element:
-		el = document.Call("createElement", n.GetNodeName())
+		el = document.Call("createElement", node.GetNodeName())
 		setAttributes(el, n.Attributes)
 		node.SetReference(jsValue(el))
-		for _, child := range n.Children {
+		for _, child := range node.GetChildren() {
 			el.Call("appendChild", createElement(child))
 		}
 	default:
@@ -85,30 +88,47 @@ func getParentElement(node h.VNode) js.Value {
 }
 
 func replaceElement(oldNode, newNode h.VNode, parent js.Value) {
-	node := createElement(newNode)
-	parent.Call("insertBefore", node, oldNode.GetReference())
+	println("replace element")
+	newEl := createElement(newNode)
+	oldEl := js.Value(oldNode.GetReference().(jsValue))
+	parent.Call("insertBefore", newEl, oldEl)
 	removeElement(oldNode)
+	newNode.SetReference(jsValue(newEl))
 }
 
 func updateElement(oldNode, newNode h.VNode) {
+	println("update element")
 	parent := getParentElement(oldNode)
 	if parent == js.Null() {
+		println("parent is null")
 		return
 	}
 
 	elRef := js.Value(oldNode.GetReference().(jsValue))
 
 	if oldNode.GetNodeType() != newNode.GetNodeType() {
+		println("node type not equal")
 		replaceElement(oldNode, newNode, parent)
 		return
 	}
 
 	if newNode.GetNodeType() == h.NODE_TYPE_TEXT_NODE {
-		replaceElement(oldNode, newNode, parent)
+		println("node type is text node")
+		oldText := oldNode.(*h.TextElement)
+		newText := newNode.(*h.TextElement)
+		newNode.SetReference(oldNode.GetReference())
+		if oldText.TextContent == newText.TextContent {
+			return
+		}
+		oldNode.GetReference().Set("textContent", newText.TextContent)
 		return
 	}
 
+	println("node type" + strconv.Itoa(int(newNode.GetNodeType())))
+
 	if newNode.GetNodeType() != h.NODE_TYPE_ELEMENT_NODE {
+		println("node type is not element node")
+		println(newNode.GetNodeName())
 		// Not supported node type
 		return
 	}
@@ -118,7 +138,7 @@ func updateElement(oldNode, newNode h.VNode) {
 		return
 	}
 
-	newEl, ok := oldNode.(*h.Element)
+	newEl, ok := newNode.(*h.Element)
 	if !ok {
 		return
 	}
@@ -149,6 +169,8 @@ func updateElement(oldNode, newNode h.VNode) {
 		oldChild := oldNode.GetChildren()[i]
 		updateElement(oldChild, newChild)
 	}
+
+	newNode.SetReference(oldNode.GetReference())
 }
 
 func removeElement(node h.VNode) {
@@ -165,6 +187,7 @@ func removeElement(node h.VNode) {
 		return
 	}
 
-	parent.Call("removeChild", node.GetReference())
+	el := js.Value(node.GetReference().(jsValue))
+	parent.Call("removeChild", el)
 	node.SetReference(nil)
 }

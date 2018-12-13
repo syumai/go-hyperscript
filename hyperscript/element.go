@@ -3,9 +3,10 @@ package hyperscript
 type (
 	Element struct {
 		NodeName   string
+		NodeType   NodeType
 		Children   VNodes
 		Attributes Object
-		Reference Value // Reference to real DOM
+		Reference  Value // Reference to real DOM
 	}
 )
 
@@ -13,8 +14,8 @@ func (el *Element) GetNodeName() string {
 	return el.NodeName
 }
 
-func (el *Element) GetNodeType() int {
-	return NODE_TYPE_ELEMENT_NODE
+func (el *Element) GetNodeType() NodeType {
+	return el.NodeType
 }
 
 func (el *Element) GetChildren() VNodes {
