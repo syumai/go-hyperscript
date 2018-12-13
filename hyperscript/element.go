@@ -5,17 +5,26 @@ type (
 		NodeName   string
 		Children   VNodes
 		Attributes Object
+		Reference Value // Reference to real DOM
 	}
 )
 
-func (vn *Element) GetNodeName() string {
-	return vn.NodeName
+func (el *Element) GetNodeName() string {
+	return el.NodeName
 }
 
-func (vn *Element) GetNodeType() int {
+func (el *Element) GetNodeType() int {
 	return NODE_TYPE_ELEMENT_NODE
 }
 
-func (vn *Element) GetChildren() VNodes {
-	return vn.Children
+func (el *Element) GetChildren() VNodes {
+	return el.Children
+}
+
+func (el *Element) SetReference(ref Value) {
+	el.Reference = ref
+}
+
+func (el *Element) GetReference() Value {
+	return el.Reference
 }

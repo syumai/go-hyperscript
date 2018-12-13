@@ -10,6 +10,8 @@ type (
 		GetNodeName() string
 		GetNodeType() int
 		GetChildren() VNodes
+		SetReference(Value)
+		GetReference() Value
 	}
 
 	VNodes []VNode

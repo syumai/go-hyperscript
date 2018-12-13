@@ -59,11 +59,11 @@ func TestH(t *testing.T) {
 				},
 			},
 			&Element{
-				"div",
-				[]VNode{
+				NodeName: "div",
+				Children: []VNode{
 					Text("should be included"),
 				},
-				Object{
+				Attributes: Object{
 					"id": "hello",
 				},
 			},

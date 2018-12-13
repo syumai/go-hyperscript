@@ -15,3 +15,11 @@ func (tn Text) GetNodeType() int {
 func (tn Text) GetChildren() VNodes {
 	return []VNode{}
 }
+
+func (tn Text) GetReference() Value {
+	return nil
+}
+
+func (tn Text) SetReference(Value) {
+	// do nothing
+}

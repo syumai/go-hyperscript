@@ -11,8 +11,21 @@ var (
 	document = js.Global().Get("document")
 )
 
-func Render(node h.VNode, container js.Value) {
-	container.Call("appendChild", createElement(node))
+type Renderer struct {
+	oldNode h.VNode
+}
+
+func NewRenderer() *Renderer {
+	return &Renderer{}
+}
+
+func (r *Renderer) Render(node h.VNode, container js.Value) {
+	if r.oldNode == nil {
+		container.Call("appendChild", createElement(node))
+	} else {
+		updateElement(r.oldNode, node)
+	}
+	r.oldNode = node
 }
 
 func createElement(node h.VNode) js.Value {
@@ -40,6 +53,7 @@ func createElement(node h.VNode) js.Value {
 				el.Set(k, v)
 			}
 		}
+		node.SetReference(jsValue(el))
 		for _, child := range n.Children {
 			el.Call("appendChild", createElement(child))
 		}
@@ -47,4 +61,10 @@ func createElement(node h.VNode) js.Value {
 		el = document.Call("createTextNode", "")
 	}
 	return el
+}
+
+func updateElement(oldNode, newNode h.VNode) {
+}
+
+func detectChange() {
 }
