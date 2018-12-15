@@ -29,7 +29,6 @@ func (r *Renderer) Render(node h.VNode, container js.Value) {
 }
 
 func createElement(node h.VNode) js.Value {
-	println("create element")
 	var el js.Value
 	switch n := node.(type) {
 	case *h.TextNode:
@@ -87,7 +86,6 @@ func getParentElement(node h.VNode) js.Value {
 }
 
 func replaceElement(oldNode, newNode h.VNode, parent js.Value) {
-	println("replace element")
 	newEl := createElement(newNode)
 	oldEl := js.Value(oldNode.Reference().(jsValue))
 	parent.Call("insertBefore", newEl, oldEl)
@@ -96,23 +94,19 @@ func replaceElement(oldNode, newNode h.VNode, parent js.Value) {
 }
 
 func updateElement(oldNode, newNode h.VNode) {
-	println("update element")
 	parent := getParentElement(oldNode)
 	if parent == js.Null() {
-		println("parent is null")
 		return
 	}
 
 	elRef := js.Value(oldNode.Reference().(jsValue))
 
 	if oldNode.NodeType() != newNode.NodeType() {
-		println("node type not equal")
 		replaceElement(oldNode, newNode, parent)
 		return
 	}
 
 	if newNode.NodeType() == h.NodeTypeTextNode {
-		println("node type is text node")
 		oldText := oldNode.(*h.TextNode)
 		newText := newNode.(*h.TextNode)
 		newNode.SetReference(oldNode.Reference())
@@ -123,11 +117,7 @@ func updateElement(oldNode, newNode h.VNode) {
 		return
 	}
 
-	println("node type " + newNode.NodeType().String())
-
 	if newNode.NodeType() != h.NodeTypeElementNode {
-		println("node type is not element node")
-		println(newNode.NodeName())
 		// Not supported node type
 		return
 	}

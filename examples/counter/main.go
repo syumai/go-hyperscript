@@ -26,7 +26,6 @@ func app(h.Object) h.VNode {
 
 func main() {
 	render.UpdateHandler = func() {
-		println("update")
 		renderer.Render(h.H(app, nil), body)
 	}
 	render.Update()
