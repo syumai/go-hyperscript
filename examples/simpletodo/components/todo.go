@@ -1,6 +1,8 @@
 package components
 
 import (
+	"strconv"
+
 	"github.com/syumai/go-hyperscript/examples/simpletodo/state"
 	"github.com/syumai/go-hyperscript/examples/simpletodo/style"
 	h "github.com/syumai/go-hyperscript/hyperscript"
@@ -11,9 +13,15 @@ func ToDo(props h.Object) h.VNode {
 	removeToDo := props.Get("removeToDo").(func(int))
 	toDos := props.Get("todos").(state.ToDos)
 
-	var toDoNodes h.VNodes
+	var (
+		toDoNodes h.VNodes
+		doneCount int
+	)
 	for i, toDo := range toDos {
 		i, toDo := i, toDo
+		if toDo.Done {
+			doneCount++
+		}
 		onCheck := h.Callback(func([]h.Value) { setToDoDone(i, !toDo.Done) })
 		onClickRemove := h.Callback(func([]h.Value) { removeToDo(i) })
 		toDoNodes = append(toDoNodes,
@@ -27,6 +35,8 @@ func ToDo(props h.Object) h.VNode {
 
 	return h.H("div", nil,
 		h.H("h3", nil, h.Text("ToDos")),
+		h.H("div", nil, h.Text("Count: "+strconv.Itoa(len(toDos)))),
+		h.H("div", nil, h.Text("Done: "+strconv.Itoa(doneCount))),
 		h.H("div", nil, toDoNodes...),
 	)
 }

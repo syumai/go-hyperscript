@@ -38,14 +38,7 @@ func (s *State) RemoveToDo(index int) {
 	if index >= len(s.ToDos) {
 		return
 	}
-	var toDos ToDos
-	for i, toDo := range s.ToDos {
-		if i == index {
-			continue
-		}
-		toDos = append(toDos, toDo)
-	}
-	s.ToDos = toDos
+	s.ToDos = append(s.ToDos[:index], s.ToDos[index+1:]...)
 	s.afterSetState()
 }
 
