@@ -9,7 +9,12 @@ import (
 	h "github.com/syumai/go-hyperscript/hyperscript"
 )
 
-var app = func(h.Object) h.VNode {
+var (
+	body     = js.Global().Get("document").Get("body")
+	renderer = dom.NewRenderer()
+)
+
+func app(h.Object) h.VNode {
 	return h.H("div", nil,
 		h.H("h1", nil, h.Text("Counter")),
 		h.H(counter.Counter, nil),
@@ -19,12 +24,9 @@ var app = func(h.Object) h.VNode {
 	)
 }
 
-var body = js.Global().Get("document").Get("body")
-
 func main() {
 	render.UpdateHandler = func() {
-		body.Set("innerHTML", "")
-		dom.Render(h.H(app, nil), body)
+		renderer.Render(h.H(app, nil), body)
 	}
 	render.Update()
 	select {}

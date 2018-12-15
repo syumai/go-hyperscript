@@ -1,15 +1,12 @@
 package hyperscript
 
-const (
-	NODE_TYPE_ELEMENT_NODE = 1
-	NODE_TYPE_TEXT_NODE    = 3
-)
-
 type (
 	VNode interface {
-		GetNodeName() string
-		GetNodeType() int
-		GetChildren() VNodes
+		NodeName() string
+		NodeType() NodeType
+		Children() VNodes
+		Reference() Value
+		SetReference(Value)
 	}
 
 	VNodes []VNode
@@ -31,11 +28,7 @@ func H(tag interface{}, attrs Object, children ...VNode) VNode {
 	case func(Object) VNode:
 		return v(attrs)
 	case string:
-		return &Element{
-			NodeName:   v,
-			Children:   children,
-			Attributes: attrs,
-		}
+		return element(v, attrs, children...)
 	default:
 		return BlankElement
 	}

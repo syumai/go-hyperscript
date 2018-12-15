@@ -30,7 +30,12 @@ func TestH(t *testing.T) {
 					Text("should not be included"),
 				},
 			},
-			Text("test"),
+			&TextNode{
+				Node: &Node{
+					nodeName: "test",
+				},
+				TextContent: "test",
+			},
 		},
 		{
 			"Tag func(Object) VNode",
@@ -45,7 +50,12 @@ func TestH(t *testing.T) {
 					Text("should not be included"),
 				},
 			},
-			Text("test"),
+			&TextNode{
+				Node: &Node{
+					nodeName: "test",
+				},
+				TextContent: "test",
+			},
 		},
 		{
 			"Tag string",
@@ -58,12 +68,19 @@ func TestH(t *testing.T) {
 					Text("should be included"),
 				},
 			},
-			&Element{
-				"div",
-				[]VNode{
-					Text("should be included"),
+			&ElementNode{
+				Node: &Node{
+					nodeName: "div",
+					children: []VNode{
+						&TextNode{
+							Node: &Node{
+								nodeName: "should be included",
+							},
+							TextContent: "should be included",
+						},
+					},
 				},
-				Object{
+				Attributes: Object{
 					"id": "hello",
 				},
 			},

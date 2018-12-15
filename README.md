@@ -17,7 +17,7 @@ func main() {
 		...
 	)
 	body := js.Global().Get("document").Get("body")
-	dom.Render(node, body)
+	dom.NewRenderer().Render(node, body)
 }
 ```
 
@@ -30,6 +30,10 @@ func main() {
 
 * [Counter example](https://syumai.github.io/go-hyperscript/examples/counter/)
   - [Code](https://github.com/syumai/go-hyperscript/tree/master/examples/counter/main.go)
+
+* [Simple ToDo list example](https://syumai.github.io/go-hyperscript/examples/simpletodo/)
+  - [Code](https://github.com/syumai/go-hyperscript/tree/master/examples/simpletodo/main.go)
+
 
 ## Environment
 

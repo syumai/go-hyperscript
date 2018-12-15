@@ -1,9 +1,9 @@
 package hyperscript
 
 type (
-	Callback func(args []Value)
+	Callback      func(args []Value)
 	EventCallback struct {
-		Flg EventCallbackFlag
+		Flg  EventCallbackFlag
 		Func func(event Value)
 	}
 )
@@ -11,15 +11,24 @@ type (
 type EventCallbackFlag int
 
 const (
-	PreventDefault EventCallbackFlag = 1 << iota
-	StopPropagation
-	StopImmediatePropagation
+	EventCallbackFlgPreventDefault EventCallbackFlag = 1 << iota
+	EventCallbackFlgStopPropagation
+	EventCallbackFlgStopImmediatePropagation
 )
 
 func NewEventCallback(flags EventCallbackFlag, fn func(event Value)) EventCallback {
 	return EventCallback{
-		Flg: flags,
+		Flg:  flags,
 		Func: fn,
 	}
 }
 
+func IsCallback(v interface{}) bool {
+	switch v.(type) {
+	case Callback:
+		return true
+	case EventCallback:
+		return true
+	}
+	return false
+}

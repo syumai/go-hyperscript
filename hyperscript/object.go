@@ -70,3 +70,37 @@ func (o Object) Bools(key string) []bool {
 func (o Object) Key() string {
 	return o.String("key")
 }
+
+func ObjectEqual(a, b Object) bool {
+	if len(a) != len(b) {
+		return false
+	}
+
+	for k, va := range a {
+		if IsCallback(va) {
+			return false
+		}
+		if vb, ok := b[k]; ok {
+			if IsCallback(vb) {
+				return false
+			}
+			if va != vb {
+				return false
+			}
+		}
+	}
+
+	return true
+}
+
+func ObjectDiff(old, new Object) Object {
+	diff := make(Object)
+
+	for k, v := range old {
+		if _, ok := new[k]; !ok {
+			diff[k] = v
+		}
+	}
+
+	return diff
+}

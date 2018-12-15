@@ -3,11 +3,14 @@ package main
 import (
 	"syscall/js"
 
-	h "github.com/syumai/go-hyperscript/hyperscript"
 	"github.com/syumai/go-hyperscript/dom"
+	h "github.com/syumai/go-hyperscript/hyperscript"
 )
 
-var body = js.Global().Get("document").Get("body")
+var (
+	body     = js.Global().Get("document").Get("body")
+	renderer = dom.NewRenderer()
+)
 
 func mapToList(names ...string) h.VNodes {
 	elements := make(h.VNodes, len(names))
@@ -34,5 +37,5 @@ func main() {
 			h.Text("Show the code on GitHub"),
 		),
 	)
-	dom.Render(node, body)
+	renderer.Render(node, body)
 }
