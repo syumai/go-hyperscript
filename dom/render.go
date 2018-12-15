@@ -1,7 +1,6 @@
 package dom
 
 import (
-	"strconv"
 	"syscall/js"
 
 	h "github.com/syumai/go-hyperscript/hyperscript"
@@ -33,14 +32,14 @@ func createElement(node h.VNode) js.Value {
 	println("create element")
 	var el js.Value
 	switch n := node.(type) {
-	case *h.TextElement:
+	case *h.TextNode:
 		el = document.Call("createTextNode", n.TextContent)
 		node.SetReference(jsValue(el))
-	case *h.Element:
-		el = document.Call("createElement", node.GetNodeName())
+	case *h.ElementNode:
+		el = document.Call("createElement", node.NodeName())
 		setAttributes(el, n.Attributes)
 		node.SetReference(jsValue(el))
-		for _, child := range node.GetChildren() {
+		for _, child := range node.Children() {
 			el.Call("appendChild", createElement(child))
 		}
 	default:
@@ -75,7 +74,7 @@ func getParentElement(node h.VNode) js.Value {
 		return js.Null()
 	}
 
-	ref := node.GetReference()
+	ref := node.Reference()
 	if ref == nil {
 		return js.Null()
 	}
@@ -90,7 +89,7 @@ func getParentElement(node h.VNode) js.Value {
 func replaceElement(oldNode, newNode h.VNode, parent js.Value) {
 	println("replace element")
 	newEl := createElement(newNode)
-	oldEl := js.Value(oldNode.GetReference().(jsValue))
+	oldEl := js.Value(oldNode.Reference().(jsValue))
 	parent.Call("insertBefore", newEl, oldEl)
 	removeElement(oldNode)
 	newNode.SetReference(jsValue(newEl))
@@ -104,41 +103,41 @@ func updateElement(oldNode, newNode h.VNode) {
 		return
 	}
 
-	elRef := js.Value(oldNode.GetReference().(jsValue))
+	elRef := js.Value(oldNode.Reference().(jsValue))
 
-	if oldNode.GetNodeType() != newNode.GetNodeType() {
+	if oldNode.NodeType() != newNode.NodeType() {
 		println("node type not equal")
 		replaceElement(oldNode, newNode, parent)
 		return
 	}
 
-	if newNode.GetNodeType() == h.NODE_TYPE_TEXT_NODE {
+	if newNode.NodeType() == h.NODE_TYPE_TEXT_NODE {
 		println("node type is text node")
-		oldText := oldNode.(*h.TextElement)
-		newText := newNode.(*h.TextElement)
-		newNode.SetReference(oldNode.GetReference())
+		oldText := oldNode.(*h.TextNode)
+		newText := newNode.(*h.TextNode)
+		newNode.SetReference(oldNode.Reference())
 		if oldText.TextContent == newText.TextContent {
 			return
 		}
-		oldNode.GetReference().Set("textContent", newText.TextContent)
+		oldNode.Reference().Set("textContent", newText.TextContent)
 		return
 	}
 
-	println("node type" + strconv.Itoa(int(newNode.GetNodeType())))
+	println("node type " + newNode.NodeType().String())
 
-	if newNode.GetNodeType() != h.NODE_TYPE_ELEMENT_NODE {
+	if newNode.NodeType() != h.NODE_TYPE_ELEMENT_NODE {
 		println("node type is not element node")
-		println(newNode.GetNodeName())
+		println(newNode.NodeName())
 		// Not supported node type
 		return
 	}
 
-	oldEl, ok := oldNode.(*h.Element)
+	oldEl, ok := oldNode.(*h.ElementNode)
 	if !ok {
 		return
 	}
 
-	newEl, ok := newNode.(*h.Element)
+	newEl, ok := newNode.(*h.ElementNode)
 	if !ok {
 		return
 	}
@@ -152,25 +151,25 @@ func updateElement(oldNode, newNode h.VNode) {
 	}
 
 	// Remove unused children
-	childCountDiff := len(oldNode.GetChildren()) - len(newNode.GetChildren())
+	childCountDiff := len(oldNode.Children()) - len(newNode.Children())
 	if childCountDiff > 0 {
-		for i := len(newNode.GetChildren()) - 1; i < childCountDiff; i++ {
-			removeElement(oldNode.GetChildren()[i])
+		for i := len(newNode.Children()) - 1; i < childCountDiff; i++ {
+			removeElement(oldNode.Children()[i])
 		}
 	}
 
-	for i, newChild := range newNode.GetChildren() {
+	for i, newChild := range newNode.Children() {
 		// Create new node if old one does not exist
-		if i >= len(oldNode.GetChildren()) {
+		if i >= len(oldNode.Children()) {
 			node := createElement(newChild)
 			elRef.Call("appendChild", node)
 			continue
 		}
-		oldChild := oldNode.GetChildren()[i]
+		oldChild := oldNode.Children()[i]
 		updateElement(oldChild, newChild)
 	}
 
-	newNode.SetReference(oldNode.GetReference())
+	newNode.SetReference(oldNode.Reference())
 }
 
 func removeElement(node h.VNode) {
@@ -178,7 +177,7 @@ func removeElement(node h.VNode) {
 		return
 	}
 
-	for _, childNode := range node.GetChildren() {
+	for _, childNode := range node.Children() {
 		removeElement(childNode)
 	}
 
@@ -187,7 +186,7 @@ func removeElement(node h.VNode) {
 		return
 	}
 
-	el := js.Value(node.GetReference().(jsValue))
+	el := js.Value(node.Reference().(jsValue))
 	parent.Call("removeChild", el)
 	node.SetReference(nil)
 }
