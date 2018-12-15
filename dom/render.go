@@ -111,7 +111,7 @@ func updateElement(oldNode, newNode h.VNode) {
 		return
 	}
 
-	if newNode.NodeType() == h.NODE_TYPE_TEXT_NODE {
+	if newNode.NodeType() == h.NodeTypeTextNode {
 		println("node type is text node")
 		oldText := oldNode.(*h.TextNode)
 		newText := newNode.(*h.TextNode)
@@ -125,7 +125,7 @@ func updateElement(oldNode, newNode h.VNode) {
 
 	println("node type " + newNode.NodeType().String())
 
-	if newNode.NodeType() != h.NODE_TYPE_ELEMENT_NODE {
+	if newNode.NodeType() != h.NodeTypeElementNode {
 		println("node type is not element node")
 		println(newNode.NodeName())
 		// Not supported node type

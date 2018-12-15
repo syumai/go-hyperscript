@@ -16,7 +16,7 @@ var (
 )
 
 var (
-	appendToDo = h.NewEventCallback(h.PreventDefault, func(h.Value) {
+	appendToDo = h.NewEventCallback(h.EventCallbackFlgPreventDefault, func(h.Value) {
 		s.AppendToDo(state.ToDo{
 			Title: s.Title,
 			Done:  false,
@@ -24,7 +24,7 @@ var (
 		s.SetTitle("")
 	})
 
-	setTitle = h.NewEventCallback(h.PreventDefault, func(event h.Value) {
+	setTitle = h.NewEventCallback(h.EventCallbackFlgPreventDefault, func(event h.Value) {
 		s.SetTitle(event.Get("target").Get("value").String())
 	})
 )

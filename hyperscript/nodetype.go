@@ -5,16 +5,16 @@ type (
 )
 
 const (
-	NODE_TYPE_UNKNOWN      NodeType = 0
-	NODE_TYPE_ELEMENT_NODE          = 1
-	NODE_TYPE_TEXT_NODE             = 3
+	NodeTypeUnknown     NodeType = 0
+	NodeTypeElementNode          = 1
+	NodeTypeTextNode             = 3
 )
 
 func (n NodeType) String() string {
 	switch n {
-	case NODE_TYPE_ELEMENT_NODE:
+	case NodeTypeElementNode:
 		return "element"
-	case NODE_TYPE_TEXT_NODE:
+	case NodeTypeTextNode:
 		return "text"
 	}
 	return "unknown"

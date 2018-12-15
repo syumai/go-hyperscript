@@ -17,5 +17,5 @@ func Text(t string) VNode {
 }
 
 func (el *TextNode) NodeType() NodeType {
-	return NODE_TYPE_TEXT_NODE
+	return NodeTypeTextNode
 }

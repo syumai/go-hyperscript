@@ -18,5 +18,5 @@ func element(nodeName string, attrs Object, children ...VNode) VNode {
 }
 
 func (el *ElementNode) NodeType() NodeType {
-	return NODE_TYPE_ELEMENT_NODE
+	return NodeTypeElementNode
 }

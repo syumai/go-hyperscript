@@ -11,9 +11,9 @@ type (
 type EventCallbackFlag int
 
 const (
-	PreventDefault EventCallbackFlag = 1 << iota
-	StopPropagation
-	StopImmediatePropagation
+	EventCallbackFlgPreventDefault EventCallbackFlag = 1 << iota
+	EventCallbackFlgStopPropagation
+	EventCallbackFlgStopImmediatePropagation
 )
 
 func NewEventCallback(flags EventCallbackFlag, fn func(event Value)) EventCallback {
@@ -24,11 +24,11 @@ func NewEventCallback(flags EventCallbackFlag, fn func(event Value)) EventCallba
 }
 
 func IsCallback(v interface{}) bool {
-	_, isCallback := v.(Callback)
-	return isCallback
-}
-
-func IsEventCallback(v interface{}) bool {
-	_, isEventCallback := v.(EventCallback)
-	return isEventCallback
+	switch v.(type) {
+	case Callback:
+		return true
+	case EventCallback:
+		return true
+	}
+	return false
 }
