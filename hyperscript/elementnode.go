@@ -7,7 +7,7 @@ type (
 	}
 )
 
-func Element(nodeName string, attrs Object, children ...VNode) VNode {
+func element(nodeName string, attrs Object, children ...VNode) VNode {
 	return &ElementNode{
 		Node: &Node{
 			nodeName: nodeName,

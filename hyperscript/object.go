@@ -77,11 +77,17 @@ func ObjectEqual(a, b Object) bool {
 	}
 
 	for k, va := range a {
-		if IsCallback(va) {
+		switch {
+		case IsCallback(va):
+			return false
+		case IsEventCallback(va):
 			return false
 		}
 		if vb, ok := b[k]; ok {
-			if IsCallback(vb) {
+			switch {
+			case IsCallback(vb):
+				return false
+			case IsEventCallback(vb):
 				return false
 			}
 			if va != vb {

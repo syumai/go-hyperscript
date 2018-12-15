@@ -28,7 +28,7 @@ func H(tag interface{}, attrs Object, children ...VNode) VNode {
 	case func(Object) VNode:
 		return v(attrs)
 	case string:
-		return Element(v, attrs, children...)
+		return element(v, attrs, children...)
 	default:
 		return BlankElement
 	}

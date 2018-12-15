@@ -27,3 +27,8 @@ func IsCallback(v interface{}) bool {
 	_, isCallback := v.(Callback)
 	return isCallback
 }
+
+func IsEventCallback(v interface{}) bool {
+	_, isEventCallback := v.(EventCallback)
+	return isEventCallback
+}
