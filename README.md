@@ -31,6 +31,10 @@ func main() {
 * [Counter example](https://syumai.github.io/go-hyperscript/examples/counter/)
   - [Code](https://github.com/syumai/go-hyperscript/tree/master/examples/counter/main.go)
 
+* [Simple ToDo list example](https://syumai.github.io/go-hyperscript/examples/simpletodo/)
+  - [Code](https://github.com/syumai/go-hyperscript/tree/master/examples/simpletodo/main.go)
+
+
 ## Environment
 
 * go 1.11
