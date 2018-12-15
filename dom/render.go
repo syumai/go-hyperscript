@@ -151,9 +151,9 @@ func updateElement(oldNode, newNode h.VNode) {
 	}
 
 	// Remove unused children
-	childCountDiff := len(oldNode.Children()) - len(newNode.Children())
-	if childCountDiff > 0 {
-		for i := len(newNode.Children()) - 1; i < childCountDiff; i++ {
+	oldChilrenLen, newChildrenLen := len(oldNode.Children()), len(newNode.Children())
+	if oldChilrenLen-newChildrenLen > 0 {
+		for i := newChildrenLen; i < oldChilrenLen; i++ {
 			removeElement(oldNode.Children()[i])
 		}
 	}

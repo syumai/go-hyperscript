@@ -1,11 +1,14 @@
 package style
 
-type Style map[string]string
+type Prop [2]string
 
-func (s Style) String() string {
+func Style(styles ...Prop) string {
+	if len(styles) < 2 {
+		return ""
+	}
 	var styleStr string
-	for k, v := range s {
-		styleStr += k + ": " + v + ";"
+	for _, style := range styles {
+		styleStr += style[0] + ": " + style[1] + ";"
 	}
 	return styleStr
 }
