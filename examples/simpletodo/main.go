@@ -42,6 +42,9 @@ func render() {
 				"setToDoDone": s.SetToDoDone,
 				"removeToDo":  s.RemoveToDo,
 			}),
+			h.H("a", h.Object{"href": "https://github.com/syumai/go-hyperscript/"},
+				h.Text("Show the code on GitHub"),
+			),
 		),
 		body,
 	)
