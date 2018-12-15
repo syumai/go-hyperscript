@@ -26,7 +26,14 @@ func main() {
 * https://syumai.github.io/go-hyperscript/examples/basic/
   - [Code](https://github.com/syumai/go-hyperscript/tree/master/examples/basic/main.go)
 
-## Other Examples
+### Update DOM
+
+* Now go-hyperscript provides basic support for reusing and updating existing DOM.
+* To use this function, please render multiple times using same renderer.
+  - Hook state's changes (used in: [Simple ToDo list example](https://syumai.github.io/go-hyperscript/examples/simpletodo/))
+  - Use main loop (used in: [Counter example](https://syumai.github.io/go-hyperscript/examples/counter/))
+
+## Examples
 
 * [Counter example](https://syumai.github.io/go-hyperscript/examples/counter/)
   - [Code](https://github.com/syumai/go-hyperscript/tree/master/examples/counter/main.go)

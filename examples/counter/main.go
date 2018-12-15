@@ -2,10 +2,10 @@ package main
 
 import (
 	"syscall/js"
+	"time"
 
 	"github.com/syumai/go-hyperscript/dom"
 	"github.com/syumai/go-hyperscript/examples/counter/counter"
-	"github.com/syumai/go-hyperscript/examples/counter/render"
 	h "github.com/syumai/go-hyperscript/hyperscript"
 )
 
@@ -25,9 +25,14 @@ func app(h.Object) h.VNode {
 }
 
 func main() {
-	render.UpdateHandler = func() {
-		renderer.Render(h.H(app, nil), body)
+	t := time.NewTicker(time.Millisecond)
+	for {
+		select {
+		case <-t.C:
+			renderer.Render(
+				h.H(app, nil),
+				body,
+			)
+		}
 	}
-	render.Update()
-	select {}
 }
