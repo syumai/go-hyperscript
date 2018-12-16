@@ -1,11 +1,13 @@
 # go-hyperscript
 
-* Simple [hyperscript](https://github.com/hyperhype/hyperscript) like script implemented in golang.
-* Write HTML using golang function.
+* Simple [hyperscript](https://github.com/hyperhype/hyperscript) like script implemented in Go.
+* You can use this package in these ways:
+  - Write HTML using Go function.
+  - Update existing DOM based on previous VNode tree.
 
 ## Usage
 
-### Render HTML with wasm
+### Write HTML using Go function
 
 ```go
 func main() {
@@ -21,7 +23,7 @@ func main() {
 }
 ```
 
-#### Result
+#### Example
 
 * https://syumai.github.io/go-hyperscript/examples/basic/
   - [Code](https://github.com/syumai/go-hyperscript/tree/master/examples/basic/main.go)
@@ -33,13 +35,13 @@ func main() {
   - Hook state's changes (used in: [Simple ToDo list example](https://syumai.github.io/go-hyperscript/examples/simpletodo/))
   - Use main loop (used in: [Counter example](https://syumai.github.io/go-hyperscript/examples/counter/))
 
-## Examples
-
-* [Counter example](https://syumai.github.io/go-hyperscript/examples/counter/)
-  - [Code](https://github.com/syumai/go-hyperscript/tree/master/examples/counter/main.go)
+#### Examples
 
 * [Simple ToDo list example](https://syumai.github.io/go-hyperscript/examples/simpletodo/)
   - [Code](https://github.com/syumai/go-hyperscript/tree/master/examples/simpletodo/main.go)
+
+* [Counter example](https://syumai.github.io/go-hyperscript/examples/counter/)
+  - [Code](https://github.com/syumai/go-hyperscript/tree/master/examples/counter/main.go)
 
 
 ## Environment
