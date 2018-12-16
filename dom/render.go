@@ -56,11 +56,11 @@ func setAttributes(el js.Value, attrs h.Object) {
 				for i := 0; i < len(v); i++ {
 					s[i] = jsValue(v[i])
 				}
-				c(s)
+				c.Call(s)
 			}))
 		case h.EventCallback:
 			el.Set(k, js.NewEventCallback(js.EventCallbackFlag(c.Flg), func(event js.Value) {
-				c.Func(jsValue(event))
+				c.Call(jsValue(event))
 			}))
 		default:
 			el.Set(k, v)

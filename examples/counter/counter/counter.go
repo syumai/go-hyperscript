@@ -13,11 +13,11 @@ type State struct {
 var state = State{}
 
 var (
-	increment = h.Callback(func([]h.Value) {
+	increment = h.NewCallback(func([]h.Value) {
 		state.count++
 	})
 
-	decrement = h.Callback(func([]h.Value) {
+	decrement = h.NewCallback(func([]h.Value) {
 		state.count--
 	})
 )
