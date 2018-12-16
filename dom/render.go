@@ -31,12 +31,12 @@ func (r *Renderer) Render(node h.VNode, container js.Value) {
 func createElement(node h.VNode) js.Value {
 	var el js.Value
 	switch n := node.(type) {
-	case *h.TextNode:
-		el = document.Call("createTextNode", n.TextContent)
+	case h.TextContenter:
+		el = document.Call("createTextNode", n.TextContent())
 		node.SetReference(jsValue(el))
-	case *h.ElementNode:
+	case h.Attributer:
 		el = document.Call("createElement", node.NodeName())
-		setAttributes(el, n.Attributes)
+		setAttributes(el, n.Attributes())
 		node.SetReference(jsValue(el))
 		for _, child := range node.Children() {
 			el.Call("appendChild", createElement(child))
@@ -107,13 +107,13 @@ func updateElement(oldNode, newNode h.VNode) {
 	}
 
 	if newNode.NodeType() == h.NodeTypeTextNode {
-		oldText := oldNode.(*h.TextNode)
-		newText := newNode.(*h.TextNode)
+		oldText := oldNode.(h.TextContenter)
+		newText := newNode.(h.TextContenter)
 		newNode.SetReference(oldNode.Reference())
-		if oldText.TextContent == newText.TextContent {
+		if oldText.TextContent() == newText.TextContent() {
 			return
 		}
-		oldNode.Reference().Set("textContent", newText.TextContent)
+		oldNode.Reference().Set("textContent", newText.TextContent())
 		return
 	}
 
@@ -122,22 +122,22 @@ func updateElement(oldNode, newNode h.VNode) {
 		return
 	}
 
-	oldEl, ok := oldNode.(*h.ElementNode)
+	oldEl, ok := oldNode.(h.Attributer)
 	if !ok {
 		return
 	}
 
-	newEl, ok := newNode.(*h.ElementNode)
+	newEl, ok := newNode.(h.Attributer)
 	if !ok {
 		return
 	}
 
 	// Update properties
-	if !h.ObjectEqual(oldEl.Attributes, newEl.Attributes) {
-		for k, _ := range h.ObjectDiff(oldEl.Attributes, newEl.Attributes) {
+	if !h.ObjectEqual(oldEl.Attributes(), newEl.Attributes()) {
+		for k, _ := range h.ObjectDiff(oldEl.Attributes(), newEl.Attributes()) {
 			elRef.Set(k, js.Undefined())
 		}
-		setAttributes(elRef, newEl.Attributes)
+		setAttributes(elRef, newEl.Attributes())
 	}
 
 	// Remove unused children

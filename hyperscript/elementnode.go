@@ -1,22 +1,28 @@
 package hyperscript
 
-type (
-	ElementNode struct {
-		*Node
-		Attributes Object
-	}
-)
+type elementNode struct {
+	*Node
+	attributes Object
+}
+
+type Attributer interface {
+	Attributes() Object
+}
 
 func element(nodeName string, attrs Object, children ...VNode) VNode {
-	return &ElementNode{
+	return &elementNode{
 		Node: &Node{
 			nodeName: nodeName,
 			children: children,
 		},
-		Attributes: attrs,
+		attributes: attrs,
 	}
 }
 
-func (el *ElementNode) NodeType() NodeType {
+func (el *elementNode) Attributes() Object {
+	return el.attributes
+}
+
+func (el *elementNode) NodeType() NodeType {
 	return NodeTypeElementNode
 }
