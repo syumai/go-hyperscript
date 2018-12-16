@@ -18,27 +18,7 @@ func TestH(t *testing.T) {
 		expected VNode
 	}{
 		{
-			"Tag StatelessComponent",
-			args{
-				StatelessComponent(func(props Object) VNode {
-					return Text(props.String("text"))
-				}),
-				Object{
-					"text": "test",
-				},
-				[]VNode{
-					Text("should not be included"),
-				},
-			},
-			&textNode{
-				Node: &Node{
-					nodeName: "test",
-				},
-				textContent: "test",
-			},
-		},
-		{
-			"Tag func(Object) VNode",
+			"Tag Component",
 			args{
 				func(props Object) VNode {
 					return Text(props.String("text"))
