@@ -1,10 +1,13 @@
 package hyperscript
 
 type (
-	Callback      func(args []Value)
+	Callback struct {
+		Func *func(args []Value)
+	}
+
 	EventCallback struct {
 		Flg  EventCallbackFlag
-		Func func(event Value)
+		Func *func(event Value)
 	}
 )
 
@@ -16,19 +19,23 @@ const (
 	EventCallbackFlgStopImmediatePropagation
 )
 
-func NewEventCallback(flags EventCallbackFlag, fn func(event Value)) EventCallback {
-	return EventCallback{
-		Flg:  flags,
-		Func: fn,
+func NewCallback(fn func(args []Value)) Callback {
+	return Callback{
+		Func: &fn,
 	}
 }
 
-func IsCallback(v interface{}) bool {
-	switch v.(type) {
-	case Callback:
-		return true
-	case EventCallback:
-		return true
+func NewEventCallback(flags EventCallbackFlag, fn func(event Value)) EventCallback {
+	return EventCallback{
+		Flg:  flags,
+		Func: &fn,
 	}
-	return false
+}
+
+func (c Callback) Call(args []Value) {
+	(*c.Func)(args)
+}
+
+func (c EventCallback) Call(event Value) {
+	(*c.Func)(event)
 }
