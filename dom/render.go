@@ -31,16 +31,20 @@ func (r *Renderer) Render(node h.VNode, container js.Value) {
 func createElement(node h.VNode) js.Value {
 	var el js.Value
 	switch n := node.(type) {
-	case h.TextContenter:
+	case h.TextNode:
 		el = document.Call("createTextNode", n.TextContent())
 		node.SetReference(jsValue(el))
-	case h.Attributer:
-		el = document.Call("createElement", node.NodeName())
+	case h.ElementNode:
+		el = document.Call("createElement", n.Name())
 		setAttributes(el, n.Attributes())
 		node.SetReference(jsValue(el))
 		for _, child := range node.Children() {
 			el.Call("appendChild", createElement(child))
 		}
+	case h.ComponentNode:
+		vNode := n.Component()(n.Attributes())
+		el = createElement(vNode)
+		n.SetNodeTree(vNode)
 	default:
 		el = document.Call("createTextNode", "")
 	}
@@ -86,6 +90,12 @@ func getParentElement(node h.VNode) js.Value {
 }
 
 func replaceElement(oldNode, newNode h.VNode, parent js.Value) {
+	if oldNode.Type() == h.NodeTypeComponentNode {
+		n := oldNode.(h.ComponentNode)
+		replaceElement(n.NodeTree(), newNode, parent)
+		n.SetNodeTree(nil)
+		return
+	}
 	newEl := createElement(newNode)
 	oldEl := js.Value(oldNode.Reference().(jsValue))
 	parent.Call("insertBefore", newEl, oldEl)
@@ -101,14 +111,14 @@ func updateElement(oldNode, newNode h.VNode) {
 
 	elRef := js.Value(oldNode.Reference().(jsValue))
 
-	if oldNode.NodeType() != newNode.NodeType() {
+	if oldNode.Type() != newNode.Type() {
 		replaceElement(oldNode, newNode, parent)
 		return
 	}
 
-	if newNode.NodeType() == h.NodeTypeTextNode {
-		oldText := oldNode.(h.TextContenter)
-		newText := newNode.(h.TextContenter)
+	if newNode.Type() == h.NodeTypeTextNode {
+		oldText := oldNode.(h.TextNode)
+		newText := newNode.(h.TextNode)
 		newNode.SetReference(oldNode.Reference())
 		if oldText.TextContent() == newText.TextContent() {
 			return
@@ -117,17 +127,30 @@ func updateElement(oldNode, newNode h.VNode) {
 		return
 	}
 
-	if newNode.NodeType() != h.NodeTypeElementNode {
+	if newNode.Type() == h.NodeTypeComponentNode {
+		oldComponentNode := oldNode.(h.ComponentNode)
+		newComponentNode := newNode.(h.ComponentNode)
+		newComponentNode.SetNodeTree(oldComponentNode.NodeTree())
+		if newComponentNode.ComponentPointer() != oldComponentNode.ComponentPointer() {
+			replaceElement(oldNode, newNode, parent)
+		}
+		if !h.ObjectEqual(newComponentNode.Attributes(), oldComponentNode.Attributes()) {
+			replaceElement(oldNode, newNode, parent)
+		}
+		return
+	}
+
+	if newNode.Type() != h.NodeTypeElementNode {
 		// Not supported node type
 		return
 	}
 
-	oldEl, ok := oldNode.(h.Attributer)
+	oldEl, ok := oldNode.(h.ElementNode)
 	if !ok {
 		return
 	}
 
-	newEl, ok := newNode.(h.Attributer)
+	newEl, ok := newNode.(h.ElementNode)
 	if !ok {
 		return
 	}

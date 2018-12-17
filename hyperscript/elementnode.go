@@ -1,28 +1,40 @@
 package hyperscript
 
 type elementNode struct {
-	*Node
+	name       string
+	children   VNodes
+	reference  Value
 	attributes Object
 }
 
-type Attributer interface {
-	Attributes() Object
-}
-
-func element(nodeName string, attrs Object, children ...VNode) VNode {
+func element(name string, attrs Object, children ...VNode) VNode {
 	return &elementNode{
-		Node: &Node{
-			nodeName: nodeName,
-			children: children,
-		},
+		name:       name,
+		children:   children,
 		attributes: attrs,
 	}
 }
 
-func (el *elementNode) Attributes() Object {
-	return el.attributes
+func (el *elementNode) Type() NodeType {
+	return NodeTypeElementNode
 }
 
-func (el *elementNode) NodeType() NodeType {
-	return NodeTypeElementNode
+func (el *elementNode) Children() VNodes {
+	return el.children
+}
+
+func (el *elementNode) Reference() Value {
+	return el.reference
+}
+
+func (el *elementNode) SetReference(ref Value) {
+	el.reference = ref
+}
+
+func (el *elementNode) Name() string {
+	return el.name
+}
+
+func (el *elementNode) Attributes() Object {
+	return el.attributes
 }

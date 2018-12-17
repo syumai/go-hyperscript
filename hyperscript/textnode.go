@@ -1,27 +1,32 @@
 package hyperscript
 
 type textNode struct {
-	*Node
+	reference   Value
 	textContent string
-}
-
-type TextContenter interface {
-	TextContent() string
 }
 
 func Text(t string) VNode {
 	return &textNode{
-		Node: &Node{
-			nodeName: t,
-		},
 		textContent: t,
 	}
 }
 
-func (el *textNode) TextContent() string {
-	return el.textContent
+func (el *textNode) Type() NodeType {
+	return NodeTypeTextNode
 }
 
-func (el *textNode) NodeType() NodeType {
-	return NodeTypeTextNode
+func (el *textNode) Children() VNodes {
+	return nil
+}
+
+func (el *textNode) Reference() Value {
+	return el.reference
+}
+
+func (el *textNode) SetReference(ref Value) {
+	el.reference = ref
+}
+
+func (el *textNode) TextContent() string {
+	return el.textContent
 }

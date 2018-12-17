@@ -12,52 +12,49 @@ func TestH(t *testing.T) {
 		children []VNode
 	}
 
+	cmp := func(props Object) VNode {
+		return Text(props.String("text"))
+	}
+
 	testcases := []struct {
 		name string
 		args
 		expected VNode
 	}{
 		{
-			"Tag Component",
-			args{
-				func(props Object) VNode {
-					return Text(props.String("text"))
-				},
-				Object{
+			name: "Tag Component",
+			args: args{
+				tag: cmp,
+				attrs: Object{
 					"text": "test",
 				},
-				[]VNode{
+				children: []VNode{
 					Text("should not be included"),
 				},
 			},
-			&textNode{
-				Node: &Node{
-					nodeName: "test",
+			expected: &componentNode{
+				component: cmp,
+				attributes: Object{
+					"text": "test",
 				},
-				textContent: "test",
 			},
 		},
 		{
-			"Tag string",
-			args{
-				"div",
-				Object{
+			name: "Tag string",
+			args: args{
+				tag: "div",
+				attrs: Object{
 					"id": "hello",
 				},
-				[]VNode{
+				children: []VNode{
 					Text("should be included"),
 				},
 			},
-			&elementNode{
-				Node: &Node{
-					nodeName: "div",
-					children: []VNode{
-						&textNode{
-							Node: &Node{
-								nodeName: "should be included",
-							},
-							textContent: "should be included",
-						},
+			expected: &elementNode{
+				name: "div",
+				children: []VNode{
+					&textNode{
+						textContent: "should be included",
 					},
 				},
 				attributes: Object{
@@ -70,8 +67,29 @@ func TestH(t *testing.T) {
 	for _, tc := range testcases {
 		t.Run(tc.name, func(t *testing.T) {
 			actual := H(tc.tag, tc.attrs, tc.children...)
+
+			if tc.expected.Type() == NodeTypeComponentNode {
+				ecn, ok := tc.expected.(*componentNode)
+				if !ok {
+					t.Errorf("failed to convert expected to componentNode")
+				}
+
+				acn, ok := actual.(*componentNode)
+				if !ok {
+					t.Errorf("failed to convert actual to componentNode")
+				}
+
+				if ecn.ComponentPointer() != acn.ComponentPointer() {
+					t.Errorf("component pointers not equal")
+				}
+
+				// Set components to nil to compare nodes using DeepEqual
+				ecn.component = nil
+				acn.component = nil
+			}
+
 			if !reflect.DeepEqual(actual, tc.expected) {
-				t.Errorf("not matched expected: %v, actual: %v", tc.expected, actual)
+				t.Errorf("not matched expected: %#v, actual: %#v", tc.expected, actual)
 			}
 		})
 	}

@@ -1,25 +1,20 @@
 package hyperscript
 
-type (
-	Node struct {
-		nodeName  string
-		children  VNodes
-		reference Value // Reference to real DOM
-	}
-)
+import "unsafe"
 
-func (el *Node) NodeName() string {
-	return el.nodeName
+type ElementNode interface {
+	Name() string
+	Attributes() Object
 }
 
-func (el *Node) Children() VNodes {
-	return el.children
+type TextNode interface {
+	TextContent() string
 }
 
-func (el *Node) Reference() Value {
-	return el.reference
-}
-
-func (el *Node) SetReference(ref Value) {
-	el.reference = ref
+type ComponentNode interface {
+	Component() Component
+	ComponentPointer() unsafe.Pointer
+	Attributes() Object
+	NodeTree() VNode
+	SetNodeTree(nt VNode)
 }
