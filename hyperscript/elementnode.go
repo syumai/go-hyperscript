@@ -8,12 +8,13 @@ type elementNode struct {
 }
 
 type ElementNode interface {
+	VNode
 	Name() string
 	Children() VNodes
 	Attributes() Object
 }
 
-func element(name string, attrs Object, children ...VNode) VNode {
+func element(name string, attrs Object, children ...VNode) ElementNode {
 	return &elementNode{
 		name:       name,
 		children:   children,

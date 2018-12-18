@@ -6,10 +6,11 @@ type textNode struct {
 }
 
 type TextNode interface {
+	VNode
 	Content() string
 }
 
-func Text(t string) VNode {
+func Text(t string) TextNode {
 	return &textNode{
 		content: t,
 	}
