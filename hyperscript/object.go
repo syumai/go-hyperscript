@@ -40,6 +40,24 @@ func (o Object) Bool(key string) bool {
 	return false
 }
 
+func (o Object) Callback(key string) Callback {
+	if v, ok := o[key]; ok {
+		if c, ok := v.(Callback); ok {
+			return c
+		}
+	}
+	return Callback{}
+}
+
+func (o Object) EventCallback(key string) EventCallback {
+	if v, ok := o[key]; ok {
+		if e, ok := v.(EventCallback); ok {
+			return e
+		}
+	}
+	return EventCallback{}
+}
+
 func (o Object) Strings(key string) []string {
 	if v, ok := o[key]; ok {
 		if strs, ok := v.([]string); ok {
@@ -65,6 +83,24 @@ func (o Object) Bools(key string) []bool {
 		}
 	}
 	return []bool{}
+}
+
+func (o Object) Callbacks(key string) []Callback {
+	if v, ok := o[key]; ok {
+		if cbs, ok := v.([]Callback); ok {
+			return cbs
+		}
+	}
+	return []Callback{}
+}
+
+func (o Object) EventCallbacks(key string) []EventCallback {
+	if v, ok := o[key]; ok {
+		if ecs, ok := v.([]EventCallback); ok {
+			return ecs
+		}
+	}
+	return []EventCallback{}
 }
 
 func (o Object) Key() string {
