@@ -1,27 +1,32 @@
 package hyperscript
 
 type textNode struct {
-	*Node
-	textContent string
+	content   string
+	reference Value // Reference to real DOM
 }
 
-type TextContenter interface {
-	TextContent() string
+type TextNode interface {
+	Content() string
 }
 
 func Text(t string) VNode {
 	return &textNode{
-		Node: &Node{
-			nodeName: t,
-		},
-		textContent: t,
+		content: t,
 	}
 }
 
-func (el *textNode) TextContent() string {
-	return el.textContent
+func (el *textNode) Content() string {
+	return el.content
 }
 
 func (el *textNode) NodeType() NodeType {
 	return NodeTypeTextNode
+}
+
+func (el *textNode) Reference() Value {
+	return el.reference
+}
+
+func (el *textNode) SetReference(ref Value) {
+	el.reference = ref
 }

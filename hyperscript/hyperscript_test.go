@@ -31,10 +31,7 @@ func TestH(t *testing.T) {
 				},
 			},
 			&textNode{
-				Node: &Node{
-					nodeName: "test",
-				},
-				textContent: "test",
+				content: "test",
 			},
 		},
 		{
@@ -49,15 +46,10 @@ func TestH(t *testing.T) {
 				},
 			},
 			&elementNode{
-				Node: &Node{
-					nodeName: "div",
-					children: []VNode{
-						&textNode{
-							Node: &Node{
-								nodeName: "should be included",
-							},
-							textContent: "should be included",
-						},
+				name: "div",
+				children: []VNode{
+					&textNode{
+						content: "should be included",
 					},
 				},
 				attributes: Object{

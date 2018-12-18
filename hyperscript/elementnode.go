@@ -1,22 +1,32 @@
 package hyperscript
 
 type elementNode struct {
-	*Node
+	name       string
+	children   VNodes
 	attributes Object
+	reference  Value // Reference to real DOM
 }
 
-type Attributer interface {
+type ElementNode interface {
+	Name() string
+	Children() VNodes
 	Attributes() Object
 }
 
-func element(nodeName string, attrs Object, children ...VNode) VNode {
+func element(name string, attrs Object, children ...VNode) VNode {
 	return &elementNode{
-		Node: &Node{
-			nodeName: nodeName,
-			children: children,
-		},
+		name:       name,
+		children:   children,
 		attributes: attrs,
 	}
+}
+
+func (el *elementNode) Name() string {
+	return el.name
+}
+
+func (el *elementNode) Children() VNodes {
+	return el.children
 }
 
 func (el *elementNode) Attributes() Object {
@@ -25,4 +35,12 @@ func (el *elementNode) Attributes() Object {
 
 func (el *elementNode) NodeType() NodeType {
 	return NodeTypeElementNode
+}
+
+func (el *elementNode) Reference() Value {
+	return el.reference
+}
+
+func (el *elementNode) SetReference(ref Value) {
+	el.reference = ref
 }

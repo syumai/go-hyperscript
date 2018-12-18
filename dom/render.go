@@ -31,14 +31,14 @@ func (r *Renderer) Render(node h.VNode, container js.Value) {
 func createElement(node h.VNode) js.Value {
 	var el js.Value
 	switch n := node.(type) {
-	case h.TextContenter:
-		el = document.Call("createTextNode", n.TextContent())
+	case h.TextNode:
+		el = document.Call("createTextNode", n.Content())
 		node.SetReference(jsValue(el))
-	case h.Attributer:
-		el = document.Call("createElement", node.NodeName())
+	case h.ElementNode:
+		el = document.Call("createElement", n.Name())
 		setAttributes(el, n.Attributes())
 		node.SetReference(jsValue(el))
-		for _, child := range node.Children() {
+		for _, child := range n.Children() {
 			el.Call("appendChild", createElement(child))
 		}
 	default:
@@ -107,13 +107,13 @@ func updateElement(oldNode, newNode h.VNode) {
 	}
 
 	if newNode.NodeType() == h.NodeTypeTextNode {
-		oldText := oldNode.(h.TextContenter)
-		newText := newNode.(h.TextContenter)
+		oldText := oldNode.(h.TextNode)
+		newText := newNode.(h.TextNode)
 		newNode.SetReference(oldNode.Reference())
-		if oldText.TextContent() == newText.TextContent() {
+		if oldText.Content() == newText.Content() {
 			return
 		}
-		oldNode.Reference().Set("textContent", newText.TextContent())
+		oldNode.Reference().Set("textContent", newText.Content())
 		return
 	}
 
@@ -122,12 +122,12 @@ func updateElement(oldNode, newNode h.VNode) {
 		return
 	}
 
-	oldEl, ok := oldNode.(h.Attributer)
+	oldEl, ok := oldNode.(h.ElementNode)
 	if !ok {
 		return
 	}
 
-	newEl, ok := newNode.(h.Attributer)
+	newEl, ok := newNode.(h.ElementNode)
 	if !ok {
 		return
 	}
@@ -141,21 +141,21 @@ func updateElement(oldNode, newNode h.VNode) {
 	}
 
 	// Remove unused children
-	oldChilrenLen, newChildrenLen := len(oldNode.Children()), len(newNode.Children())
+	oldChilrenLen, newChildrenLen := len(oldEl.Children()), len(newEl.Children())
 	if oldChilrenLen-newChildrenLen > 0 {
 		for i := newChildrenLen; i < oldChilrenLen; i++ {
-			removeElement(oldNode.Children()[i])
+			removeElement(oldEl.Children()[i])
 		}
 	}
 
-	for i, newChild := range newNode.Children() {
+	for i, newChild := range newEl.Children() {
 		// Create new node if old one does not exist
-		if i >= len(oldNode.Children()) {
+		if i >= len(oldEl.Children()) {
 			node := createElement(newChild)
 			elRef.Call("appendChild", node)
 			continue
 		}
-		oldChild := oldNode.Children()[i]
+		oldChild := oldEl.Children()[i]
 		updateElement(oldChild, newChild)
 	}
 
@@ -167,8 +167,10 @@ func removeElement(node h.VNode) {
 		return
 	}
 
-	for _, childNode := range node.Children() {
-		removeElement(childNode)
+	if el, ok := node.(h.ElementNode); ok {
+		for _, childNode := range el.Children() {
+			removeElement(childNode)
+		}
 	}
 
 	parent := getParentElement(node)

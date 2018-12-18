@@ -1,18 +1,6 @@
 package hyperscript
 
 type (
-	VNode interface {
-		NodeName() string
-		NodeType() NodeType
-		Children() VNodes
-		Reference() Value
-		SetReference(Value)
-	}
-
-	VNodes []VNode
-)
-
-type (
 	Component = func(props Object) VNode
 )
 
