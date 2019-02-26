@@ -4,7 +4,7 @@ import "testing"
 
 func Test_increment(t *testing.T) {
 	state = State{}
-	increment.Call(nil)
+	increment.Call(nil, nil)
 	if state.count != 1 {
 		t.Errorf("count must be 1")
 	}
@@ -12,7 +12,7 @@ func Test_increment(t *testing.T) {
 
 func Test_decrement(t *testing.T) {
 	state = State{}
-	decrement.Call(nil)
+	decrement.Call(nil, nil)
 	if state.count != -1 {
 		t.Errorf("count must be -1")
 	}

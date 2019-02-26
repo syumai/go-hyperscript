@@ -22,8 +22,8 @@ func ToDo(props h.Object) h.VNode {
 		if toDo.Done {
 			doneCount++
 		}
-		onCheck := h.NewCallback(func([]h.Value) { setToDoDone(i, !toDo.Done) })
-		onClickRemove := h.NewCallback(func([]h.Value) { removeToDo(i) })
+		onCheck := h.FuncOf(func(h.Value, []h.Value) interface{} { setToDoDone(i, !toDo.Done); return nil })
+		onClickRemove := h.FuncOf(func(h.Value, []h.Value) interface{} { removeToDo(i); return nil })
 		toDoNodes = append(toDoNodes,
 			h.H("div", h.Object{"style": style.Style(style.Prop{"display", "flex"}, style.Prop{"align-items", "center"})},
 				h.H("input", h.Object{"type": "checkbox", "checked": toDo.Done, "onchange": onCheck}),

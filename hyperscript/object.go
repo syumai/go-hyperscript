@@ -40,22 +40,13 @@ func (o Object) Bool(key string) bool {
 	return false
 }
 
-func (o Object) Callback(key string) Callback {
+func (o Object) Func(key string) Func {
 	if v, ok := o[key]; ok {
-		if c, ok := v.(Callback); ok {
+		if c, ok := v.(Func); ok {
 			return c
 		}
 	}
-	return Callback{}
-}
-
-func (o Object) EventCallback(key string) EventCallback {
-	if v, ok := o[key]; ok {
-		if e, ok := v.(EventCallback); ok {
-			return e
-		}
-	}
-	return EventCallback{}
+	return Func{}
 }
 
 func (o Object) Strings(key string) []string {
@@ -85,22 +76,13 @@ func (o Object) Bools(key string) []bool {
 	return []bool{}
 }
 
-func (o Object) Callbacks(key string) []Callback {
+func (o Object) Callbacks(key string) []Func {
 	if v, ok := o[key]; ok {
-		if cbs, ok := v.([]Callback); ok {
+		if cbs, ok := v.([]Func); ok {
 			return cbs
 		}
 	}
-	return []Callback{}
-}
-
-func (o Object) EventCallbacks(key string) []EventCallback {
-	if v, ok := o[key]; ok {
-		if ecs, ok := v.([]EventCallback); ok {
-			return ecs
-		}
-	}
-	return []EventCallback{}
+	return []Func{}
 }
 
 func (o Object) Key() string {

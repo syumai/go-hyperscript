@@ -50,17 +50,13 @@ func createElement(node h.VNode) js.Value {
 func setAttributes(el js.Value, attrs h.Object) {
 	for k, v := range attrs {
 		switch c := v.(type) {
-		case h.Callback:
-			el.Set(k, js.NewCallback(func(v []js.Value) {
+		case h.Func:
+			el.Set(k, js.FuncOf(func(this js.Value, v []js.Value) interface{} {
 				s := make([]h.Value, len(v))
 				for i := 0; i < len(v); i++ {
 					s[i] = jsValue(v[i])
 				}
-				c.Call(s)
-			}))
-		case h.EventCallback:
-			el.Set(k, js.NewEventCallback(js.EventCallbackFlag(c.Flg), func(event js.Value) {
-				c.Call(jsValue(event))
+				return c.Call(jsValue(this), s)
 			}))
 		default:
 			el.Set(k, v)
