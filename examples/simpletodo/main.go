@@ -16,16 +16,22 @@ var (
 )
 
 var (
-	appendToDo = h.NewEventCallback(h.EventCallbackFlgPreventDefault, func(h.Value) {
+	appendToDo = h.FuncOf(func(this h.Value, args []h.Value) interface{} {
+		event := args[0]
+		event.Call("preventDefault")
 		s.AppendToDo(state.ToDo{
 			Title: s.Title,
 			Done:  false,
 		})
 		s.SetTitle("")
+		return nil
 	})
 
-	setTitle = h.NewEventCallback(h.EventCallbackFlgPreventDefault, func(event h.Value) {
+	setTitle = h.FuncOf(func(this h.Value, args []h.Value) interface{} {
+		event := args[0]
+		event.Call("preventDefault")
 		s.SetTitle(event.Get("target").Get("value").String())
+		return nil
 	})
 )
 
