@@ -76,7 +76,7 @@ func (o Object) Bools(key string) []bool {
 	return []bool{}
 }
 
-func (o Object) Callbacks(key string) []Func {
+func (o Object) Funcs(key string) []Func {
 	if v, ok := o[key]; ok {
 		if cbs, ok := v.([]Func); ok {
 			return cbs
