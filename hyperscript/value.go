@@ -12,6 +12,7 @@ type Value interface {
 	Float() float64
 	Int() int
 	Bool() bool
+	Truthy() bool
 	String() string
 	InstanceOf(t Value) bool
 }

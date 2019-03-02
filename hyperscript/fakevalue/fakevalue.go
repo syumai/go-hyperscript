@@ -105,6 +105,20 @@ func (f fakeValue) Bool() bool {
 	return v
 }
 
+func (f fakeValue) Truthy() bool {
+	switch v := f.value.(type) {
+	case bool:
+		return v
+	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, float32, float64:
+		return v != 0
+	case string:
+		return v != ""
+	// TODO: add null, undefined, NaN, document.all: https://developer.mozilla.org/ja/docs/Glossary/Falsy#Examples
+	default:
+		return true
+	}
+}
+
 func (f fakeValue) String() string {
 	v, ok := f.value.(string)
 	if !ok {

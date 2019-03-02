@@ -63,6 +63,11 @@ func (v jsValue) Bool() bool {
 	return jv.Bool()
 }
 
+func (v jsValue) Truthy() bool {
+	jv := js.Value(v)
+	return jv.Truthy()
+}
+
 func (v jsValue) String() string {
 	jv := js.Value(v)
 	return jv.String()
