@@ -91,7 +91,7 @@ func replaceElement(oldNode, newNode h.VNode, parent js.Value) {
 
 func updateElement(oldNode, newNode h.VNode) {
 	parent := getParentElement(oldNode)
-	if parent == js.Null() {
+	if parent.Equal(js.Null()) {
 		return
 	}
 
@@ -170,7 +170,7 @@ func removeElement(node h.VNode) {
 	}
 
 	parent := getParentElement(node)
-	if parent == js.Null() {
+	if parent.Equal(js.Null()) {
 		return
 	}
 
